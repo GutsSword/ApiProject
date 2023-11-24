@@ -6,25 +6,28 @@ using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+// There is a file name for Log Process infos write. 
 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nLog.config"));
 
 
 // Add services to the container.
-
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly) 
     .AddNewtonsoftJson();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.ConfigureSqlContext(builder.Configuration); // (service,config)=> Sadadece config. parametresi zorunlu. Service dizi olduðu için verilmek zorunda deðil.
+builder.Services.ConfigureSqlContext(builder.Configuration); // (service,config)=> You don't have to define Service parametres but Config is required.
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureLoggerService();
+builder.Services.AddAutoMapper(typeof(Program));  // You can call it with just 1 one row. You don't have to code an Extension.
+
+
 
 var app = builder.Build();
 
-// ExpectionHandler yapýlandýrmasý
+// ExpectionHandler Configuration
 var logger = app.Services.GetRequiredService<ILoggerService>();
 app.ConfigureExpectionHandler(logger);
 
@@ -37,7 +40,7 @@ if (app.Environment.IsDevelopment())
 
 if(app.Environment.IsProduction())
 {
-    app.UseHsts(); // ExpectionHandler sonrasý yazýldý.
+    app.UseHsts(); // Coded after configure ExpectionHandler.
 }
 
 app.UseHttpsRedirection();
