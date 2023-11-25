@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 using Repositories.EFCore;
@@ -11,9 +12,20 @@ LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nL
 
 
 // Add services to the container.
-builder.Services.AddControllers()
+builder.Services.AddControllers(config =>
+{
+    config.RespectBrowserAcceptHeader = true;   // Default value is false
+    config.ReturnHttpNotAcceptable = true;  // return 406 while HttpFormat is not okey.
+})
+    .AddCustomerCsvFormatter()
+    .AddXmlDataContractSerializerFormatters()  // You can get XML data return
     .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly) 
     .AddNewtonsoftJson();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressConsumesConstraintForFormFileParameters = true;
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

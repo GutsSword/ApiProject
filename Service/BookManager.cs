@@ -25,11 +25,12 @@ namespace Services
             _mapper = mapper;
         }
 
-        public Book CreateOneBook(Book book)
+        public BookDto CreateOneBook(BookDtoForInsertion bookDto)
         {
-            _manager.Book.CreateOneBook(book);
+            var entity = _mapper.Map<Book>(bookDto);
+            _manager.Book.CreateOneBook(entity);
             _manager.Save();
-            return book;
+            return _mapper.Map<BookDto>(entity);
         }
 
         public void DeleteOneBook(int id, bool trackChanges)
@@ -44,19 +45,39 @@ namespace Services
             _manager.Save();
         }
 
-        public IEnumerable<Book> GetAllBooks(bool trackChanges)
+        public IEnumerable<BookDto> GetAllBooks(bool trackChanges)
         {
-            return _manager.Book.GetAllBooks(trackChanges);
+            var values = _manager.Book.GetAllBooks(trackChanges);
+            return _mapper.Map<IEnumerable<BookDto>>(values);
         }
 
-        public Book GetOneBookById(int id, bool trackChanges)
+        public BookDto GetOneBookById(int id, bool trackChanges)
         {
             var books = _manager.Book.GetOneBookById(id,trackChanges );
 
             if (books is null)
                 throw new BookNotFoundException(id); //404
 
-            return books;
+            return _mapper.Map<BookDto>(books);
+        }
+
+        public (BookDtoUpdate bookDtoUpdate, Book book) GetOneBookForPatch(int id, bool trackChanges)
+        {
+            var book = _manager.Book.GetOneBookById(id, trackChanges);
+
+            if(book is null)
+                throw new BookNotFoundException(id);
+            
+            var bookDtoForUpdate = _mapper.Map<BookDtoUpdate>(book);
+
+            return (bookDtoForUpdate, book);
+
+        }
+
+        public void SaveChangesForPatch(BookDtoUpdate bookDtoUpdate, Book book)
+        {
+            _mapper.Map(bookDtoUpdate, book);
+            _manager.Save();
         }
 
         public void UpdateOneBook(int id, BookDtoUpdate bookDto, bool trackChanges)    
@@ -72,6 +93,7 @@ namespace Services
 
             _manager.Book.Update(entity);
             _manager.Save();
-        }   
+        }
+
     }
 }

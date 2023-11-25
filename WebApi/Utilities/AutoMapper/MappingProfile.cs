@@ -9,6 +9,8 @@ namespace WebApi.Utilities.AutoMapper
         public MappingProfile() 
         {
             CreateMap<BookDtoUpdate, Book>().ReverseMap();
+            CreateMap<Book, BookDto>().ReverseMap();
+            CreateMap<BookDtoForInsertion, Book>().ReverseMap();
         }
     }
 }
