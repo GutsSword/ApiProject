@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLog;
+using Presentation.ActionFilters;
 using Repositories.EFCore;
 using Services.Contracts;
 using WebApi.Extensions;
@@ -27,6 +29,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressConsumesConstraintForFormFileParameters = true;
 });
 
+builder.Services.ConfigureCors();
+builder.Services.ConfigureActionFilters();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureSqlContext(builder.Configuration); // (service,config)=> You don't have to define Service parametres but Config is required.
@@ -56,6 +60,8 @@ if(app.Environment.IsProduction())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
