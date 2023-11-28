@@ -29,6 +29,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressConsumesConstraintForFormFileParameters = true;
 });
 
+builder.Services.ConfigureDataShaper();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureActionFilters();
 builder.Services.AddEndpointsApiExplorer();
