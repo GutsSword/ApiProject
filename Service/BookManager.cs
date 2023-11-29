@@ -2,6 +2,7 @@
 using Entities.DataTransferObjects;
 using Entities.Exceptions;
 using Entities.Expections;
+using Entities.LinkModels;
 using Entities.Models;
 using Entities.RequestFeatures;
 using Repositories.Contracts;
@@ -20,14 +21,35 @@ namespace Services
         private readonly IRepositoryManager _manager;
         private  readonly ILoggerService _logger;
         private readonly IMapper _mapper;
-        private readonly IDataShaper<BookDto> _shaper;
+        private readonly IBookLinks _bookLinks;
 
-        public BookManager(IRepositoryManager manager, ILoggerService logger, IMapper mapper, IDataShaper<BookDto> shaper)
+        public BookManager(IRepositoryManager manager, ILoggerService logger, IMapper mapper, IBookLinks bookLinks)
         {
             _manager = manager;
             _logger = logger;
             _mapper = mapper;
-            _shaper = shaper;
+            _bookLinks = bookLinks;
+        }    
+
+        public async Task<(LinkResponse linkResponse, MetaData metaData)> GetAllBooksAsync(LinkParametres linkParametres, bool trackChanges)
+        {
+            if (linkParametres.BookParameters.ValidPriceRange is false)
+                throw new PriceOutofRangeBadRequestException();
+
+            var booksWithMetaData = await _manager.Book.GetAllBooksAsync(linkParametres.BookParameters,trackChanges);
+            var booksDto = _mapper.Map<IEnumerable<BookDto>>(booksWithMetaData);
+
+            var links = _bookLinks.TryGenerateLinks(booksDto,
+                linkParametres.BookParameters.Fields,
+                linkParametres.HttpContext);
+
+            return (links,booksWithMetaData.MetaData);  //Tupple Struct
+        }
+
+        public async Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges)
+        {
+            var books = await GetOneBookIdAndCheckExists(id,trackChanges);
+            return _mapper.Map<BookDto>(books);
         }
 
         public async Task<BookDto> CreateOneBookAsync(BookDtoForInsertion bookDto)
@@ -42,27 +64,9 @@ namespace Services
         {
 
             var entity = await GetOneBookIdAndCheckExists(id, trackChanges);
-               
+
             _manager.Book.DeleteOneBook(entity);
             await _manager.SaveAsync();
-        }
-
-        public async Task<(IEnumerable<ExpandoObject> books, MetaData metaData)> GetAllBooksAsync(BookParameters bookParameters, bool trackChanges)
-        {
-            if (bookParameters.ValidPriceRange is false)
-                throw new PriceOutofRangeBadRequestException();
-
-            var booksWithMetaData = await _manager.Book.GetAllBooksAsync(bookParameters,trackChanges);
-            var booksDto = _mapper.Map<IEnumerable<BookDto>>(booksWithMetaData);
-
-            var shapedData = _shaper.ShapeData(booksDto, bookParameters.Fields);
-            return (books : shapedData, metaData: booksWithMetaData.MetaData);  //Tupple Struct
-        }
-
-        public async Task<BookDto> GetOneBookByIdAsync(int id, bool trackChanges)
-        {
-            var books = await GetOneBookIdAndCheckExists(id,trackChanges);
-            return _mapper.Map<BookDto>(books);
         }
 
         public async Task<(BookDtoUpdate bookDtoUpdate, Book book)> GetOneBookForPatchAsync(int id, bool trackChanges)
@@ -88,9 +92,6 @@ namespace Services
             _manager.Book.Update(entity);
             await _manager.SaveAsync();
         }
-
-
-
 
 
 

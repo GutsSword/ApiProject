@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NLog;
 using Presentation.ActionFilters;
 using Repositories.EFCore;
+using Services;
 using Services.Contracts;
 using WebApi.Extensions;
 
@@ -19,16 +20,19 @@ builder.Services.AddControllers(config =>
     config.RespectBrowserAcceptHeader = true;   // Default value is false
     config.ReturnHttpNotAcceptable = true;  // return 406 while HttpFormat is not okey.
 })
-    .AddCustomerCsvFormatter()
-    .AddXmlDataContractSerializerFormatters()  // You can get XML data return
-    .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly) 
-    .AddNewtonsoftJson();
+
+.AddXmlDataContractSerializerFormatters()  // You can get XML data return
+.AddCustomerCsvFormatter()
+.AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+ //.AddNewtonsoftJson();
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressConsumesConstraintForFormFileParameters = true;
 });
 
+builder.Services.AddScoped<IBookLinks, BookLinks>();
+builder.Services.AddCustomMediaTypes();
 builder.Services.ConfigureDataShaper();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureActionFilters();
