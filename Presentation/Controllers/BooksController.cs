@@ -24,7 +24,7 @@ namespace Presentation.Controllers
         }
 
         [HttpHead]
-        [HttpGet]
+        [HttpGet(Name = "GetAllBooksAsync")]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters)   // ***[FromQuery]*** example= /books?pageNumber=2&pageSize=10
         {
@@ -49,7 +49,7 @@ namespace Presentation.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost(Name = "CreateOneBookAsync")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]     
         public async Task<IActionResult> CreateOneBookAsync([FromBody] BookDtoForInsertion bookDto)
         {               

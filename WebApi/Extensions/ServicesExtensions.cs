@@ -64,12 +64,15 @@ namespace WebApi.Extensions
             {
                 var systemTextJsonOutputFormatter = config
                 .OutputFormatters
-                .OfType<SystemTextJsonInputFormatter>() ?.FirstOrDefault();
+                .OfType<SystemTextJsonInputFormatter>()?.FirstOrDefault();
 
                 if(systemTextJsonOutputFormatter is not null)
                 {
                     systemTextJsonOutputFormatter.SupportedMediaTypes
                     .Add("application/vnd.akcapi.hateoas+json");
+
+                    systemTextJsonOutputFormatter.SupportedMediaTypes
+                    .Add("application/vnd.akcapi.apiroot+json");
                 }
 
                 var xmlOutPutFormatter = config
@@ -80,6 +83,9 @@ namespace WebApi.Extensions
                 {
                     xmlOutPutFormatter.SupportedMediaTypes
                     .Add("application/vnd.akcapi.hateoas+xml");
+
+                    xmlOutPutFormatter.SupportedMediaTypes
+                   .Add("application/vnd.akcapi.apiroot+xml");
                 }
             });
         }
