@@ -93,7 +93,11 @@ namespace Services
             await _manager.SaveAsync();
         }
 
-
+        public async Task<List<Book>> GetAllBooksAsync(bool trackChanges)
+        {
+            var books = await _manager.Book.GetAllBooksAsync(trackChanges);
+            return books;
+        }
 
         // Check Method
         private async Task<Book> GetOneBookIdAndCheckExists(int id , bool trackChanges)
@@ -107,5 +111,6 @@ namespace Services
             return entity;
         }
 
+       
     }
 }

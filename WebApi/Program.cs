@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ builder.Services.AddControllers(config =>
 {
     config.RespectBrowserAcceptHeader = true;   // Default value is false
     config.ReturnHttpNotAcceptable = true;  // return 406 while HttpFormat is not okey.
+    config.CacheProfiles.Add("5 Min", new CacheProfile() { Duration = 300 }); // Caching Profile
 })
 
 .AddXmlDataContractSerializerFormatters()  // You can get XML data return
@@ -31,6 +33,17 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressConsumesConstraintForFormFileParameters = true;
 });
 
+
+
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.ConfigureRateLimitOption();
+builder.Services.AddMemoryCache();
+builder.Services.ConfigureHttpCacheHeaders();
+builder.Services.ConfigureResponseCaching();
+builder.Services.ConfigureVersioning();
 builder.Services.AddScoped<IBookLinks, BookLinks>();
 builder.Services.AddCustomMediaTypes();
 builder.Services.ConfigureDataShaper();
@@ -66,8 +79,12 @@ if(app.Environment.IsProduction())
 
 app.UseHttpsRedirection();
 
+app.UseIpRateLimiting();
 app.UseCors("CorsPolicy");
+app.UseResponseCaching();  // It has to be after UseCors define.
+app.UseHttpCacheHeaders();
 
+app.UseAuthentication();  // Inserted for Identity Model.
 app.UseAuthorization();
 
 app.MapControllers();

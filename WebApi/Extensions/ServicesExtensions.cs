@@ -1,8 +1,15 @@
-﻿using Entities.DataTransferObjects;
+﻿using AspNetCoreRateLimit;
+using Entities.DataTransferObjects;
+using Entities.Models;
+using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Presentation.ActionFilters;
+using Presentation.Controllers;
 using Repositories.Contracts;
 using Repositories.EFCore;
 using Services;
@@ -90,5 +97,85 @@ namespace WebApi.Extensions
             });
         }
 
+        public static void ConfigureVersioning (this IServiceCollection services) 
+        {
+            services.AddApiVersioning(opt =>
+            {
+                opt.ReportApiVersions = true;   // check version info 
+                opt.AssumeDefaultVersionWhenUnspecified = true;  // return default version info
+                opt.DefaultApiVersion = new ApiVersion(1,0);
+                opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
+
+                // Convention
+                opt.Conventions.Controller<BooksController>()
+                .HasApiVersion(new ApiVersion(1, 0));
+                opt.Conventions.Controller<BooksV2Controller>()
+                .HasDeprecatedApiVersion(new ApiVersion(2, 0));
+            });
+        }
+
+        public static void ConfigureResponseCaching (this IServiceCollection services)
+        {
+            services.AddResponseCaching(); 
+        }
+
+        public static void ConfigureHttpCacheHeaders(this IServiceCollection services)
+        {
+            services.AddHttpCacheHeaders(expirationOpt =>
+            {
+                expirationOpt.MaxAge = 90;
+                expirationOpt.CacheLocation = CacheLocation.Public;
+            },
+
+            validationOpt =>
+            {
+                validationOpt.MustRevalidate = false;
+            }
+            );
+
+            
+        }
+
+        public static void ConfigureRateLimitOption(this IServiceCollection services)
+        {
+            var rareLimitRules = new List<RateLimitRule>()
+            {
+                new RateLimitRule()
+                {
+                    Endpoint = "*",
+                    Limit=3,
+                    Period="1m"
+                }
+            };
+
+            services.Configure<IpRateLimitOptions>(opt =>
+            {
+                opt.GeneralRules = rareLimitRules;
+            });
+
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+
+        }
+
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            var builder = services.AddIdentity<User, IdentityRole>(opt =>
+            {
+                opt.Password.RequireDigit = true;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequiredLength = 6;
+
+                opt.User.RequireUniqueEmail = true;
+            })
+                .AddEntityFrameworkStores<RepositoryContext>()
+                .AddDefaultTokenProviders();
+            
+
+        }
     }
 }

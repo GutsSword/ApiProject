@@ -2,6 +2,7 @@
 using Entities.Expections;
 using Entities.Models;
 using Entities.RequestFeatures;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ActionFilters;
@@ -11,8 +12,11 @@ using System.Text.Json;
 
 namespace Presentation.Controllers
 {
+    //[ApiVersion("1.0")]
     [ServiceFilter(typeof(LogFilterAttribute))]    // ...(typeof(LogFilterAttribute), Order = 2). Order word point to priority between Attributes.
     [Route("api/books")]
+    //[ResponseCache(CacheProfileName="5 Min")]
+    //[HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 80)]
     [ApiController]
     public class BooksController : ControllerBase
     {
@@ -25,6 +29,7 @@ namespace Presentation.Controllers
 
         [HttpHead]
         [HttpGet(Name = "GetAllBooksAsync")]
+        //[ResponseCache(Duration = 60)]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetAllBooksAsync([FromQuery] BookParameters bookParameters)   // ***[FromQuery]*** example= /books?pageNumber=2&pageSize=10
         {
