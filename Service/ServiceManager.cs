@@ -33,9 +33,7 @@ namespace Services
         }
         public IBookService BookService => _bookService.Value;
 
-        IAuthenticationService IServiceManager.AuthenticationService => authenticationService.Value;
-
-        //public IAuthenticationService AuthenticationService() => authenticationService.Value;
+        public IAuthenticationService AuthenticationService => authenticationService.Value;
 
     }
 }

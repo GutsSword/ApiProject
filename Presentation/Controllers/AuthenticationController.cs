@@ -38,5 +38,18 @@ namespace Presentation.Controllers
 
         }
 
+
+        [HttpPost("login")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user)
+        {
+            if(await _service.AuthenticationService.ValidateUser(user) is false)
+                return Unauthorized();   // 401
+
+            return Ok(new
+            {
+                Token = await _service.AuthenticationService.CreateToken()
+            });
+        }
     }
 }

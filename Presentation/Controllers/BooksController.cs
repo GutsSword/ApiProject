@@ -28,7 +28,7 @@ namespace Presentation.Controllers
             _manager = manager;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin,User,Editor")]
         [HttpHead]
         [HttpGet(Name = "GetAllBooksAsync")]
         //[ResponseCache(Duration = 60)]
