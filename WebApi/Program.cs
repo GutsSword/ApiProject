@@ -35,7 +35,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 
 
-builder.Services.AddAuthentication();
+builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.ConfigureIdentity();
 
 builder.Services.AddHttpContextAccessor();
