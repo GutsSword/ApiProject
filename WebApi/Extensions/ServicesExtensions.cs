@@ -10,12 +10,14 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Presentation.ActionFilters;
 using Presentation.Controllers;
 using Repositories.Contracts;
 using Repositories.EFCore;
 using Services;
 using Services.Contracts;
+using System.Runtime.Intrinsics;
 using System.Text;
 
 namespace WebApi.Extensions
@@ -44,13 +46,13 @@ namespace WebApi.Extensions
             services.AddSingleton<ILoggerService, LoggerManager>();
         }
 
-        public static void ConfigureActionFilters(this IServiceCollection services) 
+        public static void ConfigureActionFilters(this IServiceCollection services)
         {
             services.AddScoped<ValidationFilterAttribute>();  // IoC define
             services.AddSingleton<LogFilterAttribute>();
             services.AddScoped<ValidateMediaTypeAttribute>();
         }
-        
+
         public static void ConfigureCors(this IServiceCollection services)
         {
             services.AddCors(options =>
@@ -76,7 +78,7 @@ namespace WebApi.Extensions
                 .OutputFormatters
                 .OfType<SystemTextJsonInputFormatter>()?.FirstOrDefault();
 
-                if(systemTextJsonOutputFormatter is not null)
+                if (systemTextJsonOutputFormatter is not null)
                 {
                     systemTextJsonOutputFormatter.SupportedMediaTypes
                     .Add("application/vnd.akcapi.hateoas+json");
@@ -89,7 +91,7 @@ namespace WebApi.Extensions
                 .OutputFormatters
                 .OfType<XmlDataContractSerializerOutputFormatter>()?.FirstOrDefault();
 
-                if(xmlOutPutFormatter is not null)
+                if (xmlOutPutFormatter is not null)
                 {
                     xmlOutPutFormatter.SupportedMediaTypes
                     .Add("application/vnd.akcapi.hateoas+xml");
@@ -100,13 +102,13 @@ namespace WebApi.Extensions
             });
         }
 
-        public static void ConfigureVersioning (this IServiceCollection services) 
+        public static void ConfigureVersioning(this IServiceCollection services)
         {
             services.AddApiVersioning(opt =>
             {
                 opt.ReportApiVersions = true;   // check version info 
                 opt.AssumeDefaultVersionWhenUnspecified = true;  // return default version info
-                opt.DefaultApiVersion = new ApiVersion(1,0);
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
                 opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
 
                 // Convention
@@ -117,9 +119,9 @@ namespace WebApi.Extensions
             });
         }
 
-        public static void ConfigureResponseCaching (this IServiceCollection services)
+        public static void ConfigureResponseCaching(this IServiceCollection services)
         {
-            services.AddResponseCaching(); 
+            services.AddResponseCaching();
         }
 
         public static void ConfigureHttpCacheHeaders(this IServiceCollection services)
@@ -136,7 +138,7 @@ namespace WebApi.Extensions
             }
             );
 
-            
+
         }
 
         public static void ConfigureRateLimitOption(this IServiceCollection services)
@@ -177,7 +179,7 @@ namespace WebApi.Extensions
             })
                 .AddEntityFrameworkStores<RepositoryContext>()
                 .AddDefaultTokenProviders();
-            
+
 
         }
 
@@ -204,10 +206,63 @@ namespace WebApi.Extensions
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
                     };
                 });
-                
+
         }
 
+        public static void ConfigureSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc("v1",
+                    new OpenApiInfo 
+                    { 
+                        Title = "AkcaApi",
+                        Version = "v1",
+                        Description="BTK Akademi Asp.Net Core Web Api Project",
+                        TermsOfService = new Uri("https://www.btkakademi.gov.tr/"),
+                        Contact= new OpenApiContact
+                        {
+                            Name="Emirhan Akca",
+                            Email="emirhanakkca@gmail.com",
+                            Url=new Uri("https://github.com/GutsSword")
+                        }
+                    });
 
+                s.SwaggerDoc("v2",
+                   new OpenApiInfo
+                   {
+                       Title = "AkcaApi",
+                       Version = "v2"
+                   });
+
+                s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Place to add JWT with Bearer",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                s.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                  {
+                    {
+                      new OpenApiSecurityScheme
+                      {
+                        Reference = new OpenApiReference
+                          {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                          },
+                          Name = "Bearer",
+                        },
+
+                        new List<string>()
+                      }
+
+                    });
+            });
+        }
 
     }
 }

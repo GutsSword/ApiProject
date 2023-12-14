@@ -50,7 +50,7 @@ builder.Services.ConfigureDataShaper();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureActionFilters();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.ConfigureSwagger();
 builder.Services.ConfigureSqlContext(builder.Configuration); // (service,config)=> You don't have to define Service parametres but Config is required.
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
@@ -69,7 +69,11 @@ app.ConfigureExpectionHandler(logger);
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(s =>
+    {
+        s.SwaggerEndpoint("/swagger/v1/swagger.json","AkcaApi v1");
+        s.SwaggerEndpoint("/swagger/v2/swagger.json", "AkcaApi v2");
+    });
 }
 
 if(app.Environment.IsProduction())

@@ -7,6 +7,7 @@ namespace Presentation.Controllers
 {
     [ApiController]
     [Route("api/authentication")]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class AuthenticationController : ControllerBase
     {
         private readonly IServiceManager _service;
@@ -35,9 +36,7 @@ namespace Presentation.Controllers
                 return BadRequest(ModelState);
             }
 
-
         }
-
 
         [HttpPost("login")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
@@ -46,10 +45,19 @@ namespace Presentation.Controllers
             if(await _service.AuthenticationService.ValidateUser(user) is false)
                 return Unauthorized();   // 401
 
-            return Ok(new
-            {
-                Token = await _service.AuthenticationService.CreateToken()
-            });
+            var tokenDto = await _service.AuthenticationService.CreateToken(populateExp: true);
+            return Ok(tokenDto);
         }
+
+        [HttpPost("refresh")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> Refresh([FromBody] TokenDto tokenDto)
+        {
+            var tokenDtoReturn = await _service
+                .AuthenticationService
+                .RefreshToken(tokenDto);
+            return Ok(tokenDtoReturn);
+        }
+
     }
 }

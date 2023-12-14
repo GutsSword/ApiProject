@@ -486,3 +486,45 @@
 2023-12-10 16:31:39.8747 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.5.2160. Product version: 5.2.5+7c014325443d65541200b698a50b9dd4ec30c7f0. GlobalAssemblyCache: False
 2023-12-10 16:31:39.9155 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\90553\source\repos\bsStoreApp\WebApi\nLog.config
 2023-12-10 16:31:39.9766 Info Configuration initialized.
+2023-12-10 17:01:28.0086 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-12-10 17:01:28.0325 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.5.2160. Product version: 5.2.5+7c014325443d65541200b698a50b9dd4ec30c7f0. GlobalAssemblyCache: False
+2023-12-10 17:01:28.0609 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\90553\source\repos\bsStoreApp\WebApi\nLog.config
+2023-12-10 17:01:28.0783 Info Configuration initialized.
+2023-12-10 17:01:28.5934 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-12-10 17:01:28.6147 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.5.2160. Product version: 5.2.5+7c014325443d65541200b698a50b9dd4ec30c7f0. GlobalAssemblyCache: False
+2023-12-10 17:01:28.6309 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\90553\source\repos\bsStoreApp\WebApi\nLog.config
+2023-12-10 17:01:28.6482 Info Configuration initialized.
+2023-12-10 17:01:29.8736 Info AppDomain Shutting down. LogFactory closing...
+2023-12-10 17:01:29.8874 Info LogFactory has been closed.
+2023-12-10 17:01:54.5367 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-12-10 17:01:54.5584 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.5.2160. Product version: 5.2.5+7c014325443d65541200b698a50b9dd4ec30c7f0. GlobalAssemblyCache: False
+2023-12-10 17:01:54.5754 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\90553\source\repos\bsStoreApp\WebApi\nLog.config
+2023-12-10 17:01:54.5922 Info Configuration initialized.
+2023-12-10 17:01:55.2168 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-12-10 17:01:55.2378 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.5.2160. Product version: 5.2.5+7c014325443d65541200b698a50b9dd4ec30c7f0. GlobalAssemblyCache: False
+2023-12-10 17:01:55.2562 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\90553\source\repos\bsStoreApp\WebApi\nLog.config
+2023-12-10 17:01:55.2712 Info Configuration initialized.
+2023-12-10 17:01:56.4220 Info AppDomain Shutting down. LogFactory closing...
+2023-12-10 17:01:56.4220 Info LogFactory has been closed.
+2023-12-10 19:36:01.9294 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-12-10 19:36:01.9547 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.5.2160. Product version: 5.2.5+7c014325443d65541200b698a50b9dd4ec30c7f0. GlobalAssemblyCache: False
+2023-12-10 19:36:01.9705 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\90553\source\repos\bsStoreApp\WebApi\nLog.config
+2023-12-10 19:36:01.9852 Info Configuration initialized.
+2023-12-10 19:47:23.8817 Info AppDomain Shutting down. LogFactory closing...
+2023-12-10 19:47:23.9499 Info LogFactory has been closed.
+2023-12-14 14:37:48.3488 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-12-14 14:37:48.3918 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.5.2160. Product version: 5.2.5+7c014325443d65541200b698a50b9dd4ec30c7f0. GlobalAssemblyCache: False
+2023-12-14 14:37:48.4080 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\90553\source\repos\bsStoreApp\WebApi\nLog.config
+2023-12-14 14:37:48.4214 Info Configuration initialized.
+2023-12-14 14:44:14.4401 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-12-14 14:44:14.4591 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.5.2160. Product version: 5.2.5+7c014325443d65541200b698a50b9dd4ec30c7f0. GlobalAssemblyCache: False
+2023-12-14 14:44:14.4744 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\90553\source\repos\bsStoreApp\WebApi\nLog.config
+2023-12-14 14:44:14.4914 Info Configuration initialized.
+2023-12-14 14:50:18.8198 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-12-14 14:50:18.8424 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.5.2160. Product version: 5.2.5+7c014325443d65541200b698a50b9dd4ec30c7f0. GlobalAssemblyCache: False
+2023-12-14 14:50:18.8591 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\90553\source\repos\bsStoreApp\WebApi\nLog.config
+2023-12-14 14:50:18.8591 Info Configuration initialized.
+2023-12-14 15:58:47.0050 Info Registered target NLog.Targets.FileTarget(Name=logfile)
+2023-12-14 15:58:47.0255 Info NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 5.2.5.2160. Product version: 5.2.5+7c014325443d65541200b698a50b9dd4ec30c7f0. GlobalAssemblyCache: False
+2023-12-14 15:58:47.0420 Info Validating config: TargetNames=logfile, ConfigItems=12, FilePath=C:\Users\90553\source\repos\bsStoreApp\WebApi\nLog.config
+2023-12-14 15:58:47.0579 Info Configuration initialized.

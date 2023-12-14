@@ -11,6 +11,7 @@ namespace Presentation.Controllers
 {
     [ApiController]
     [Route("Api")]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class RootController : ControllerBase
     {
         private readonly LinkGenerator _linkGenerator;
