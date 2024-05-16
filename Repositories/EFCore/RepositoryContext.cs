@@ -14,6 +14,7 @@ namespace Repositories.EFCore
 
         }
         public DbSet<Book> Books { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         //Migration sırasında model oluşturulurken BookConfig sınıfındaki Seedleme dikkate alınacak.
         protected override void OnModelCreating(ModelBuilder modelBuilder)

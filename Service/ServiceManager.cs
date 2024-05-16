@@ -8,6 +8,7 @@ using Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +16,9 @@ namespace Services
 {
     public class ServiceManager : IServiceManager
     {
+
         private readonly Lazy<IBookService> _bookService;
+        private readonly Lazy<ICategoryService> _categoryService;
         private readonly Lazy<IAuthenticationService> authenticationService;
 
         public ServiceManager(IRepositoryManager repositoryManager,
@@ -25,7 +28,11 @@ namespace Services
             UserManager<User> userManager,
             IConfiguration configuration )
         { 
-            _bookService = new Lazy<IBookService>(() => new BookManager(repositoryManager, logger, mapper, bookLinks));  // Auto Ioc entry.
+            _bookService = new Lazy<IBookService>(() => 
+            new BookManager(repositoryManager, logger, mapper, bookLinks));  // Auto Ioc entry.
+
+            _categoryService =  new Lazy<ICategoryService>(()=>
+            new CategoryManager(repositoryManager));
 
             authenticationService = new Lazy<IAuthenticationService>(() =>
             new AuthenticationManager(logger, mapper, userManager, configuration)
@@ -35,5 +42,6 @@ namespace Services
 
         public IAuthenticationService AuthenticationService => authenticationService.Value;
 
+        public ICategoryService CategoryService => _categoryService.Value;
     }
 }
