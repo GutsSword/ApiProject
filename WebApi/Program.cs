@@ -36,7 +36,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 });
 
 
-
+builder.Services.RegisterServices();
+builder.Services.RegisterRepositories();
 builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.ConfigureIdentity();
 
