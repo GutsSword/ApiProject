@@ -31,7 +31,7 @@ namespace Repositories.EFCore
 
         public async Task<Category> GetCategoryByIdAsync(int id, bool trackChanges)
         {
-            return await FindByCondition(c => c.CategoryID.Equals(id), trackChanges)
+            return await FindByCondition(c => c.CategoryId.Equals(id), trackChanges)
                 .SingleOrDefaultAsync();
         }
 

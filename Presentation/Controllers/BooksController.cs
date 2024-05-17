@@ -29,7 +29,6 @@ namespace Presentation.Controllers
             _manager = manager;
         }
 
-        
         [HttpHead]
         [HttpGet(Name = "GetAllBooksAsync")]
         //[ResponseCache(Duration = 60)]
@@ -56,6 +55,11 @@ namespace Presentation.Controllers
             return Ok(books);
         }
 
+        [HttpGet("details")]
+        public async Task<IActionResult> GetAllBooksWithDetailsAsync()
+        {
+            return Ok(await _manager.BookService.GetAllBooksWithDetails(false));
+        }
 
         [HttpPost(Name = "CreateOneBookAsync")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]     

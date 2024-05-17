@@ -54,7 +54,13 @@ namespace Services
 
         public async Task<BookDto> CreateOneBookAsync(BookDtoForInsertion bookDto)
         {
+            var category = _manager.Category.GetCategoryByIdAsync(bookDto.CategoryId, false);
+
+            if (category is null)
+                throw new CategoryNotFoundException(bookDto.CategoryId);
+
             var entity = _mapper.Map<Book>(bookDto);
+            entity.CategoryId=bookDto.CategoryId;
             _manager.Book.CreateOneBook(entity);
             await _manager.SaveAsync();
             return _mapper.Map<BookDto>(entity);
@@ -111,6 +117,9 @@ namespace Services
             return entity;
         }
 
-       
+        public async Task<IEnumerable<Book>> GetAllBooksWithDetails(bool trackChanges)
+        {
+            return await _manager.Book.GetAllBooksWithDetailsAsync(trackChanges);
+        }
     }
 }

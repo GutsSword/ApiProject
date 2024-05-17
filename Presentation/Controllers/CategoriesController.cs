@@ -27,7 +27,7 @@ namespace Presentation.Controllers
         {
            return Ok (await _services.CategoryService.GetAllCategoriesAsync(false));
         }
-        [Authorize(Roles = "Admin,User,Editor")]
+        //[Authorize(Roles = "Admin,User,Editor")]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetAllCategoriesAsync([FromRoute] int id)
         {

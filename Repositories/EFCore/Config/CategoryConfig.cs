@@ -13,16 +13,16 @@ namespace Repositories.EFCore.Config
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.HasKey(c => c.CategoryID); // PrimaryKey
+            builder.HasKey(c => c.CategoryId); // PrimaryKey
             builder.Property(c => c.CategoryName).IsRequired();
 
             builder.HasData(
                 new Category()
-                { CategoryID = 1, CategoryName = "Computer Science" },
+                { CategoryId = 1, CategoryName = "Computer Science" },
                 new Category()
-                { CategoryID = 2, CategoryName = "Network" },
+                { CategoryId = 2, CategoryName = "Network" },
                  new Category()
-                 { CategoryID = 3, CategoryName = "Database Management Systems" }
+                 { CategoryId = 3, CategoryName = "Database Management Systems" }
                 );
         }
     }

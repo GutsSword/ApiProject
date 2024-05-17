@@ -26,7 +26,9 @@ builder.Services.AddControllers(config =>
 .AddXmlDataContractSerializerFormatters()  // You can get XML data return
 .AddCustomerCsvFormatter()
 .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
- //.AddNewtonsoftJson();
+//.AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+//.AddJsonOptions(opt => opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve);
+// Serialize sorununu çözmek için Category entity'sinde [JsonIgnore] özelliði uygulandý.
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {

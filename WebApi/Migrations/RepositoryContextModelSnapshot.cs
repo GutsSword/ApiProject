@@ -30,6 +30,9 @@ namespace WebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -39,24 +42,29 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Books");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
+                            CategoryId = 1,
                             Price = 55m,
                             Title = "Yabancı"
                         },
                         new
                         {
                             Id = 2,
+                            CategoryId = 2,
                             Price = 80m,
                             Title = "Korkusuzca Yaşamak"
                         },
                         new
                         {
                             Id = 3,
+                            CategoryId = 1,
                             Price = 90m,
                             Title = "Bilinçaltının Gücü"
                         });
@@ -64,34 +72,34 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("Entities.Models.Category", b =>
                 {
-                    b.Property<int>("CategoryID")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"), 1L, 1);
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CategoryID");
+                    b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
 
                     b.HasData(
                         new
                         {
-                            CategoryID = 1,
+                            CategoryId = 1,
                             CategoryName = "Computer Science"
                         },
                         new
                         {
-                            CategoryID = 2,
+                            CategoryId = 2,
                             CategoryName = "Network"
                         },
                         new
                         {
-                            CategoryID = 3,
+                            CategoryId = 3,
                             CategoryName = "Database Management Systems"
                         });
                 });
@@ -202,22 +210,22 @@ namespace WebApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a3632740-5810-43e1-8f05-9dd69b324fb0",
-                            ConcurrencyStamp = "17c798f1-e17c-476a-b577-c5bbff3b49fd",
+                            Id = "cab7ed7f-a049-4f24-a141-31a3531bd260",
+                            ConcurrencyStamp = "3aeedadb-81d3-4e67-a0c7-e43788f28083",
                             Name = "Editor",
                             NormalizedName = "EDITOR"
                         },
                         new
                         {
-                            Id = "8d9ad25c-c9d6-424d-a7cd-8a1feb254dfd",
-                            ConcurrencyStamp = "73380b7f-9b7e-463a-bd02-9be6bb9c5d25",
+                            Id = "da0f7186-f4dc-4ae0-bea8-560b3901735a",
+                            ConcurrencyStamp = "ce3a53b8-ac44-4b8d-9bfe-37f92b99ad7a",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "dc489a0e-756e-42a2-8bdf-4502c7c4a7a2",
-                            ConcurrencyStamp = "3428811e-43a3-4bc4-a0a7-76cae8d892b7",
+                            Id = "d4bf46a3-b98c-45c4-8274-edeed2a11c35",
+                            ConcurrencyStamp = "d1b8540b-3905-4a95-be3a-b23af3f732db",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -329,6 +337,17 @@ namespace WebApi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Entities.Models.Book", b =>
+                {
+                    b.HasOne("Entities.Models.Category", "Category")
+                        .WithMany("Books")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -378,6 +397,11 @@ namespace WebApi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.Models.Category", b =>
+                {
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }
